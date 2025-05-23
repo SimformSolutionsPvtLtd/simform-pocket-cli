@@ -134,6 +134,7 @@ const deployApp = async (
   });
 
   let chunkNumber = 1;
+  let downloadPath = '';
 
   const blobData = new Blob([fileBuffer], {
     type: currentFileContentType
@@ -208,6 +209,10 @@ const deployApp = async (
         const percentage = Math.floor((chunkNumber / totalChunks) * 100);
         console.log(`Upload Progress: ${percentage}%`);
 
+        if (response?.data?.downloadPath) {
+          downloadPath = response?.data?.downloadPath;
+        }
+
         // Increment the chunk number
         chunkNumber++;
       } else {
@@ -216,6 +221,7 @@ const deployApp = async (
     }
 
     console.log('Build Uploaded successfully');
+    !!downloadPath && console.log('Download Path:', downloadPath);
     return;
   } catch (error) {
     console.error(
